@@ -1,26 +1,9 @@
-import time
-from burp import RequestEngine, Engine
-
-# List of custom IP addresses
-custom_ip_addresses = [
-    "192.168.1.1",
-    "10.0.0.1",
-    "172.16.0.1",
-    # Add more custom IP addresses here
-]
-
 def send_requests(engine, target, total_requests, tag='race1'):
-    ip_index = 0
     for i in range(total_requests):
-        ip_address = custom_ip_addresses[ip_index % len(custom_ip_addresses)]
-        headers = {
-            'X-Forwarded-For': ip_address,
-        }
-        engine.queue(target.req, headers=headers, gate=tag)
-        ip_index += 1
+        engine.queue(target.req, gate=tag)
 
     engine.openGate(tag)
-    print(f"Sent {total_requests} requests with custom IP addresses")
+  
 
 def queueRequests(target, wordlists):
     engine = RequestEngine(endpoint=target.endpoint,
